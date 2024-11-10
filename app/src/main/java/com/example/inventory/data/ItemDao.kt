@@ -24,26 +24,26 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
-/**
- * Database access object to access the Inventory database
- */
+/*interface untuk DAO*/
 @Dao
 interface ItemDao {
-
+    /*Mendefinisikan query untuk mengambil semua item dari tabel 'items' dan mengurutkan berdasarkan nama secara ascending (ASC)*/
     @Query("SELECT * from items ORDER BY name ASC")
     fun getAllItems(): Flow<List<Item>>
 
+    /*Mendefinisikan query untuk mengambil satu item berdasarkan ID dari tabel 'items'*/
     @Query("SELECT * from items WHERE id = :id")
     fun getItem(id: Int): Flow<Item>
 
-    // Specify the conflict strategy as IGNORE, when the user tries to add an
-    // existing Item into the database Room ignores the conflict.
+    /*Menambahkan item baru ke dalam database; jika item sudah ada, strategi IGNORE akan mengabaikan konflik*/
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: Item)
 
+    /*Memperbarui item yang ada di database*/
     @Update
     suspend fun update(item: Item)
 
+    /*Menghapus item dari database*/
     @Delete
     suspend fun delete(item: Item)
 }
